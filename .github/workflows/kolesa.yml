@@ -1,42 +1,35 @@
-name: Kolesa Monitor
+Skip to content
+alizhantulep
+kolesa_bot
+Repository navigation
+Code
+Issues
+Pull requests
+Actions
+Projects
+Security and quality
+Insights
+Settings
+.github/workflows/kolesa.yml
+ 
+commit #8
+All jobs
+Run details
+Triggered via push now
+@alizhantulepalizhantulep
+pushed
+ 1eb62d1
+main
+Status
+Failure
+Total duration
+–
+Artifacts
+–
+This workflow graph cannot be shown
+A graph will be generated the next time this workflow is run.
 
-on:
-  schedule:
-    - cron: '*/20 * * * *' # Запуск каждые 20 минут
-  workflow_dispatch: # Позволяет запустить вручную
-
-jobs:
-  run-parser:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write # Разрешаем гитхабу сохранять файл истории
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          pip install playwright aiogram
-          playwright install chromium
-          playwright install-deps
-
-      - name: Run script
-        env:
-          API_TOKEN: ${{ secrets.API_TOKEN }}
-          CHAT_ID: ${{ secrets.CHAT_ID }}
-        run: python main.py
-
-    - name: Save history
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "github-actions[bot]"
-          # Создаем файл, если он вдруг исчез
-          touch seen_ads.txt 
-          git add seen_ads.txt
-          # Коммитим только если есть реальные изменения, чтобы не было ошибок
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update history" && git push)
+Annotations
+1 error
+Invalid workflow file: .github/workflows/kolesa.yml#L9
+You have an error in your yaml syntax on line 9
