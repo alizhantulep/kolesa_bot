@@ -31,18 +31,12 @@ jobs:
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python main.py
 
-      - name: Save history
+    - name: Save history
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "actions@github.com"
           git config --local user.name "github-actions[bot]"
+          # Создаем файл, если он вдруг исчез
+          touch seen_ads.txt 
           git add seen_ads.txt
-          # Проверяем, есть ли изменения, чтобы не плодить пустые коммиты
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Update seen ads [skip ci]"
-            git pull --rebase origin main
-            git push
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Коммитим только если есть реальные изменения, чтобы не было ошибок
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update history" && git push)
