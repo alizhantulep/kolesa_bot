@@ -8,6 +8,10 @@ on:
 jobs:
   run-parser:
     runs-on: ubuntu-latest
+    # ДОБАВЛЯЕМ ПРАВА НА ЗАПИСЬ:
+    permissions:
+      contents: write 
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,10 +32,10 @@ jobs:
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python main.py
 
-      - name: Save
+      - name: Save and Push
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "github-actions[bot]"
-          git add seen_ads.txt || true
-          git commit -m "update" || true
-          git push || true
+          git add seen_ads.txt
+          # Коммитим только если файл реально изменился
+          git diff --quiet && git diff --staged --quiet || (git commit -m "update history" && git push)
