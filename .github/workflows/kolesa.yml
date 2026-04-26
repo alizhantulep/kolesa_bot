@@ -1,35 +1,37 @@
-Skip to content
-alizhantulep
-kolesa_bot
-Repository navigation
-Code
-Issues
-Pull requests
-Actions
-Projects
-Security and quality
-Insights
-Settings
-.github/workflows/kolesa.yml
- 
-commit #8
-All jobs
-Run details
-Triggered via push now
-@alizhantulepalizhantulep
-pushed
- 1eb62d1
-main
-Status
-Failure
-Total duration
-–
-Artifacts
-–
-This workflow graph cannot be shown
-A graph will be generated the next time this workflow is run.
+name: Kolesa Monitor
 
-Annotations
-1 error
-Invalid workflow file: .github/workflows/kolesa.yml#L9
-You have an error in your yaml syntax on line 9
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  run-parser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install
+        run: |
+          pip install playwright aiogram
+          playwright install chromium
+
+      - name: Run
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python main.py
+
+      - name: Save
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "github-actions[bot]"
+          git add seen_ads.txt || true
+          git commit -m "update" || true
+          git push || true
