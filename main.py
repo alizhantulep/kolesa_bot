@@ -12,7 +12,7 @@ raw_id = os.getenv('CHAT_ID', '')
 clean_id = "".join(c for c in raw_id if c.isdigit() or c == '-')
 CHAT_ID = int(clean_id) if clean_id else None
 
-URL = "https://kolesa.kz/cars/toyota/land-cruiser/year-from-2021/?_sys-hasphoto=2"
+URL = "https://kolesa.kz/cars/toyota/land-cruiser/?generations[]=109896&year[from]=2021&price[to]=50000000"
 HISTORY_FILE = "seen_ads.txt"
 MIN_YEAR = 2021
 
