@@ -2,40 +2,41 @@ name: Kolesa Monitor
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '0,40 * * * *'  # Будет запускаться в 00 минут и 40 минут каждого часа
   workflow_dispatch:
-
+  
 jobs:
   run-parser:
     runs-on: ubuntu-latest
-    # ДОБАВЛЯЕМ ПРАВА НА ЗАПИСЬ:
     permissions:
-      contents: write 
-
+      contents: write # Разрешаем гитхабу сохранять файл истории
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install
+      - name: Install dependencies
         run: |
           pip install playwright aiogram
           playwright install chromium
+          playwright install-deps
 
-      - name: Run
+      - name: Run script
         env:
           API_TOKEN: ${{ secrets.API_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python main.py
 
-      - name: Save and Push
+    - name: Save history
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "github-actions[bot]"
+          # Создаем файл, если он вдруг исчез
+          touch seen_ads.txt 
           git add seen_ads.txt
-          # Коммитим только если файл реально изменился
-          git diff --quiet && git diff --staged --quiet || (git commit -m "update history" && git push)
+          # Коммитим только если есть реальные изменения, чтобы не было ошибок
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update history" && git push)
