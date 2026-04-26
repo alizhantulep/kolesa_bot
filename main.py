@@ -13,7 +13,7 @@ CHAT_ID = int(raw_id) if raw_id else None
 
 URL = "https://kolesa.kz/cars/toyota/land-cruiser/year-from-2021/?_sys-hasphoto=2"
 HISTORY_FILE = "seen_ads.txt"
-MIN_YEAR = 2021
+MIN_YEAR = 2010
 
 async def check_kolesa():
     if not API_TOKEN or not CHAT_ID:
